@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>slider demo</title>
+        <script type="text/javascript" src="../jquery-1.10.2.js"></script>
+        <script type="text/javascript" src="banner.js"></script>
+	</head>
+	<body>
+		<div class="container"></div>
+        <script type="text/javascript">
+			$(".container").banner({
+				data: [
+					{
+						"src" : "img/1.jpg",
+						"link" : "http://www.baidu.com",
+						"text" : "test test test test"
+					},
+					{
+						"src" : "img/2.jpg",
+						"link" : "http://www.163.com/",
+						"text" : "aaaa aaaa aaaa aaaa"
+					},
+					{
+						"src" : "img/3.jpg",
+						"link" : "http://www.sina.com/",
+						"text" : "ask ask ask ask"
+					},
+					{
+						"src" : "img/4.jpg",
+						"link" : "#",
+						"text" : "ssss ssss ssss ssss"
+					},
+					{
+						"src" : "img/5.jpg",
+						"link" : "#",
+						"text" : "uon uon uon uon"
+					}
+				],
+				duration: 4,
+				fx: "slide"
+			});
+        </script>
+	</body>
+</html>
