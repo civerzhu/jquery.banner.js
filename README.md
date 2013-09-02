@@ -19,6 +19,8 @@ jquery.banner.js是一个图片轮播的jQuery插件。基于jQuery，优化了�
 * fx        （自定义类型，非必要）图片切换的效果，有fade淡入淡出、slide滑动切换，以后将增加更多的效果。
 * loop      （boolean类型，非必要）是否循环播放，默认为true。
 * animation_duration （整数类型，非必要）动画的持续时间，单位为毫秒。
+* width		 (整数类型) 组件的宽度。
+* height	 (整数类型) 组件的高度。
    
 ## 调用接口:   
 jquery.banner.js提供了几个供外部调用的接口。  

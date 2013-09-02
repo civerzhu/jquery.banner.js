@@ -1,4 +1,19 @@
-
+/**
+ * @fileOverview 图片轮播组件 banner plugin
+ *		基于jQuery。
+ *		配置的数据格式详细见https://github.com/zhuboss/jquery.banner.js
+ * @example  $(".container").banner({
+				data: [
+					{
+						"src" : "img/1.jpg",
+						"link" : "http://www.baidu.com",
+						"text" : "test test test test"
+					}
+				]
+			});
+ * @version 1.0
+ * @author zhuxiaohua
+ */
 
 (function($){
 	$.extend($.fn, {
@@ -6,6 +21,11 @@
 			var that = this;
 			
 			var _banner = {
+				/**
+				 * 初始化
+				 * @param {object} opt 设置参数，包括如下：
+				 *					{array} data 输入框DOM元素
+				 */
 				init: function(options, callback){
 					var defaults = {
 						data: [],
@@ -25,18 +45,25 @@
 
 					this.formDom();
 					this.ImgLoader(this.data);
-					var timeStamp = this.duration * 1000;
 
 					// 先显示第一张图片
 					this.firstShow();
 
 					var index = 1;
-					setInterval(function(){
-						if(index > _banner.data.length - 1){
-							index = 0;
+					var timeStamp = this.duration * 1000;
+					window.loopInterval = setInterval(function(){
+						if(_banner.isPlaying){
+							if(index > _banner.data.length - 1){
+								if(!_banner.loop){
+									_banner.pause();
+									clearInterval(window.loopInterval);
+								}else{
+									index = 0;
+								}
+							}
+							_banner.showByIndex(index);
+							index = _banner.currentIndex + 1;
 						}
-						_banner.showByIndex(index);
-						index++;
 					}, timeStamp);
 
 					if(callback){
@@ -44,18 +71,30 @@
 					}
 				},
 
+				/**
+				 * 开始播放
+				 *
+				 */
 				start: function(){
 					if(!this.isPlaying){
 						this.isPlaying = true;
 					}
 				},
 
+				/**
+				 * 暂停播放
+				 *
+				 */
 				pause: function(){
 					if(this.isPlaying){
 						this.isPlaying = false;
 					}
 				},
 
+				/**
+				 * 构建基本的Dom节点，包括容器、按钮。
+				 *
+				 */
 				formDom: function(){
 					this.container.css({
 						"display" : "block",
@@ -100,7 +139,7 @@
 						$btn.attr("data-index", i);
 						$btn.click(function(e){
 							var index = $(e.target).attr("data-index");
-							_banner.showByIndex(index);
+							_banner.showByIndex(parseInt(index));
 						});
 						$btnBar.append($btn);
 					}
@@ -148,8 +187,9 @@
 						"line-height" : "60px",
 						"text-align" : "center",
 						"cursor" : "pointer",
-						"z-index" : z_index
-					}).html("&gt;").hover(function(){
+						"z-index" : z_index})
+					.html("&gt;")
+					.hover(function(){
 						$(this).css({
 							"background" : "rgba(0, 0, 0, .6)",
 							"color" : "#2C84CB"
@@ -167,7 +207,10 @@
 					this.container.append($preBtn).append($nextBtn);
 				},
 
-
+				/**
+				 * 图片加载器
+				 *
+				 */
 				ImgLoader: function(imgSrc){
 					imgSrc = $.makeArray(imgSrc);
 					for(var i in imgSrc){
@@ -180,9 +223,7 @@
 						};
 					}
 					
-					/*var textWidth = Math.abs(this.width - 200);*/
 					var textWidth = this.width - 12;
-					//var $imgs = new Array();
 					for(var i in this.imgObj){
 						var $_link = $("<a>").attr({
 							"href" : this.imgObj[i].link,
@@ -202,7 +243,6 @@
 						});
 						$_img.bind("load", function(e){
 							var index = $(e.target).attr("data-index");
-							// console.log(this.imgObj);
 							_banner.imgObj[index].isloaded = true;
 							_banner.container.append($(e.target).parent());
 						});
@@ -229,10 +269,12 @@
 						$_link.append($_img).append($_text);
 						this.imgObj[i].ele = $_link;
 					}
-
-					//return $imgs;
 				},
 
+				/**
+				 * 通过下标来显示第几张图片
+				 *
+				 */
 				showByIndex: function(index){
 					if(this.isPlaying){
 						if(index != this.currentIndex){
@@ -255,6 +297,10 @@
 					}
 				},
 
+				/**
+				 * 显示上一张图片
+				 *
+				 */
 				showPreImg: function(){
 					var _index = this.currentIndex - 1;
 					if(_index < 0){
@@ -263,6 +309,10 @@
 					this.showByIndex(_index);
 				},
 
+				/**
+				 * 显示下一张图片
+				 *
+				 */
 				showNextImg: function(){
 					var _index = this.currentIndex + 1;
 					if(_index > this.data.length - 1){
@@ -271,6 +321,10 @@
 					this.showByIndex(_index);
 				},
 
+				/**
+				 * 显示第一张图片
+				 *
+				 */
 				firstShow: function(){
 					this.ImgLoader(this.data[0]);
 					window.intervalIndex2 = setInterval(function(){
@@ -282,6 +336,10 @@
 					}, 20);
 				},
 
+				/**
+				 * 图片显示的方法
+				 *
+				 */
 				show: function($ele){
 					switch (this.fx) {
 						case "fade": 
@@ -294,6 +352,11 @@
 							break;
 					}
 				},
+
+				/**
+				 * 图片隐藏的方法
+				 *
+				 */
 				hide: function($ele){
 					switch (this.fx) {
 						case "fade": 
@@ -310,7 +373,7 @@
 			
 			_banner.init(options, callback);
 
-			return _banner;
+			return _banner; //返回_banner对象，以方便链式调用
 		}
 	});
 })(jQuery)
