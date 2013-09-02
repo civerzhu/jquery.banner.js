@@ -20,5 +20,19 @@ jquery.banner.js是一个图片轮播的jQuery插件。基于jQuery，优化了�
 * loop      （boolean类型，非必要）是否循环播放，默认为true。
 * animation_duration （整数类型，非必要）动画的持续时间，单位为毫秒。
    
+## 调用接口:   
+jquery.banner.js提供了几个供外部调用的接口。  
+
+* start 组件开始运行。     
+* pause 组件暂停运行。   
+* showByIndex 显示第几张图片。   
+* showPreImg 显示上一张图片。   
+* showNextImg 显示下一张图片。    
+
+使用示例：   
+
+    var imgBanner = $(".container").banner(...);
+    imgBanner.showByIndex(3);
+    
 ## 参考例子：
 代码中的index.html就是简单的效果展示例子。
